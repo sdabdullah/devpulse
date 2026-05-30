@@ -111,6 +111,30 @@ app.post("/api/issues", async (req: Request, res: Response) => {
 })
 
 
+// -------------- Get All issues --------------
+app.get("/api/issues?sort=newest", async (req: Request, res: Response) => {
+    try {
+
+        const allIssuResult = await pool.query(`
+                SELECT * FROM issues
+            `)
+
+        res.status(201).json({
+            success: true,
+            message: "Issues retrived successfully",
+            data: allIssuResult.rows,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Issus Not found!",
+            error: error
+        });
+    }
+})
+
+
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
