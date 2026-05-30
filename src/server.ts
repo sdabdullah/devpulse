@@ -64,6 +64,52 @@ app.post("/api/auth/signup", async (req: Request, res: Response) => {
     }
 });
 
+// -------------- User Login --------------
+app.post("/api/auth/login", async (req: Request, res: Response) => {
+    try {
+
+        // const loginResult = await pool.query(`
+        //     SELECT * FROM issues
+        //     `)
+
+        res.status(201).json({
+            success: true,
+            message: "Login successful",
+            // data: registrationResult.rows[0],
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "Invalid login details",
+            error: error
+        });
+    }
+})
+
+
+// -------------- Create Issue --------------
+app.post("/api/issues", async (req: Request, res: Response) => {
+    const { title, description, type } = req.body
+    try {
+        const issuesResult = await pool.query(`
+            INSERT INTO issues(title,description,type) VALUES($1,$2,$3) RETURNING *
+        `, [title, description, type])
+
+        res.status(201).json({
+            success: true,
+            message: "Issue created successfully",
+            data: issuesResult.rows[0],
+        });
+
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "The issue alredy Submitted",
+            error: error
+        });
+    }
+})
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
