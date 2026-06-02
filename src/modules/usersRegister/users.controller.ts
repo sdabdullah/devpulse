@@ -21,7 +21,6 @@ const userSignupRequest = async (req: Request, res: Response) => {
     }
 }
 
-
 export const userController = {
     userSignupRequest,
 }
