@@ -8,17 +8,24 @@ const insertSignupQuery = async (payload: IsignupUser) => {
 
     const userPassInHash = await bcrypt.hash(password, 12)
 
-    console.log(userPassInHash);
-
-    const registrationResult = await pool.query(`
+    if (role) {
+        const registrationResult = await pool.query(`
             INSERT INTO users(name,email,password,role) VALUES($1,$2,$3,$4) RETURNING *
         `, [name, email, userPassInHash, role]);
 
-    delete registrationResult.rows[0].password;
+         delete registrationResult.rows[0].password;
 
-    return registrationResult;
+         return registrationResult;
+    }else{
+        const registrationResult = await pool.query(`
+            INSERT INTO users(name,email,password) VALUES($1,$2,$3) RETURNING *
+        `, [name, email, userPassInHash]);
+
+         delete registrationResult.rows[0].password;
+
+         return registrationResult;
+    }
 }
-
 
 export const usersService = {
     insertSignupQuery,

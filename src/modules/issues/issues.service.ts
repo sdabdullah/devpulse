@@ -6,8 +6,6 @@ const createIssueDBQuery = async (payload: Iisseu) => {
 
     const { title, description, type, reporter_id } = payload;
 
-    const status = "open"
-
     const user = await pool.query(`
         SELECT * FROM users WHERE id=$1
     `, [reporter_id]);
@@ -19,8 +17,8 @@ const createIssueDBQuery = async (payload: Iisseu) => {
     }
 
     const issuesResult = await pool.query(`
-        INSERT INTO issues(title, description, type, status, reporter_id) VALUES($1,$2,$3,$4,$5) RETURNING *
-    `, [title, description, type, status, reporter_id]);
+        INSERT INTO issues(title, description, type, reporter_id) VALUES($1,$2,$3,$4) RETURNING *
+    `, [title, description, type, reporter_id]);
 
 
     return issuesResult;

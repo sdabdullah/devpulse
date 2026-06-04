@@ -2,5 +2,5 @@ export interface IsignupUser {
     name: string;
     email: string;
     password: string;
-    role?: string; // admin, agent, user
+    role?: string;
 }

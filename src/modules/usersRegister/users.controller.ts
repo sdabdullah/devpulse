@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { usersService } from "./users.service";
 
 const userSignupRequest = async (req: Request, res: Response) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     try {
         const registrationResult = await usersService.insertSignupQuery(req.body)

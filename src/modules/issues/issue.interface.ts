@@ -6,9 +6,8 @@ export interface IupdateIssue {
 
 
 export interface Iisseu {
-    title: string,
-    description: string,
-    type: string,
-    status: string,
-    reporter_id: string
+    title: string;
+    description: string;
+    type: string;
+    reporter_id: string;
 }
