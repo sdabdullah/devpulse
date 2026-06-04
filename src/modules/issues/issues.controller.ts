@@ -3,7 +3,7 @@ import { issuesService } from "./issues.service";
 
 const makingIssueRequest = async (req: Request, res: Response,) => {
     const { title, description, type } = req.body
-
+    console.log(req.user);
     try {
         const issuesResult = await issuesService.createIssueDBQuery(req.body);
 
@@ -13,11 +13,12 @@ const makingIssueRequest = async (req: Request, res: Response,) => {
             data: issuesResult.rows[0],
         });
 
-    } catch (error) {
+    } catch (error: any) {
         res.status(400).json({
             success: false,
-            message: "The issue alredy Submitted",
-            error: error
+            message: error.message,
+            // message: "The issue alredy Submitted",
+            // error: error
         });
     }
 }
@@ -108,7 +109,7 @@ const deleteIssuRequest = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     try {
-        
+
         const deleteResult = await issuesService.deleteIssueDBQuery(id as string)
 
         if (deleteResult.rowCount === 0) {
