@@ -13,8 +13,6 @@ const insertSignupQuery = async (payload: IsignupUser) => {
     const registrationResult = await pool.query(`
             INSERT INTO users(name,email,password,role) VALUES($1,$2,$3,$4) RETURNING *
         `, [name, email, userPassInHash, role]);
-    // RETURNING id,name,email,role,updated_at,created_at
-    // console.log(registrationResult);
 
     delete registrationResult.rows[0].password;
 

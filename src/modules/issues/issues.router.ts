@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { issuesController } from "./issues.controller";
-
-
+import middlewareAuth from "../middleware/auth";
 
 const router = Router();
 
-router.post("/", issuesController.makingIssueRequest);
+router.post("/", middlewareAuth(), issuesController.makingIssueRequest);
 router.get("/", issuesController.getAllIssuesRequest);
 router.get("/:id", issuesController.getSingleIssueRequest);
 router.patch("/:id", issuesController.updateIssueRequest);
