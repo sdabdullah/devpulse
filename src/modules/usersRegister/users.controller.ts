@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { usersService } from "./users.service";
+import handleResponse from "../../utils/handleResponse";
 
 const userSignupRequest = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
@@ -7,17 +8,21 @@ const userSignupRequest = async (req: Request, res: Response) => {
     try {
         const registrationResult = await usersService.insertSignupQuery(req.body)
 
-        res.status(201).json({
+        handleResponse(res, {
+            statusCode: 201,
             success: true,
             message: "User registered successfully",
-            data: registrationResult.rows[0],
-        });
+            data: registrationResult.rows[0]
+        })
+ 
     } catch (error) {
-        res.status(400).json({
+        handleResponse(res, {
+            statusCode: 400,
             success: false,
             message: "User alredy exists",
             error: error
-        });
+        })
+
     }
 }
 

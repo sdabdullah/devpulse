@@ -3,17 +3,12 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import config from "../../config";
 
-
-
 const userLoginQuery = async (payload: { email: string; password: string }) => {
     const { email, password } = payload
-
+    
     const userLoginResult = await pool.query(`
         SELECT * FROM users WHERE email=$1
     `, [email]);
-
-    // delete userLoginResult.rows[0].password;
-
 
     if (userLoginResult.rows.length === 0) {
         throw new Error("Invalid login details")
@@ -36,7 +31,6 @@ const userLoginQuery = async (payload: { email: string; password: string }) => {
     }
 
     const user = jwtTokenPayload
-
     const token = jwt.sign(jwtTokenPayload, config.jwtsectet as string, {
         expiresIn: "1d"
     })

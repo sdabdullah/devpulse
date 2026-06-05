@@ -10,8 +10,6 @@ const createIssueDBQuery = async (payload: Iisseu) => {
         SELECT * FROM users WHERE id=$1
     `, [reporter_id]);
 
-    // console.log(user);
-
     if (user.rows.length === 0) {
         throw new Error("User Not Exists!")
     }
@@ -19,7 +17,6 @@ const createIssueDBQuery = async (payload: Iisseu) => {
     const issuesResult = await pool.query(`
         INSERT INTO issues(title, description, type, reporter_id) VALUES($1,$2,$3,$4) RETURNING *
     `, [title, description, type, reporter_id]);
-
 
     return issuesResult;
 
@@ -31,7 +28,7 @@ const getAllIssuesDBQuery = async () => {
     const allIssuResult = await pool.query(`
         SELECT * FROM issues
     `)
-    
+
     return allIssuResult;
 }
 
@@ -70,8 +67,7 @@ const deleteIssueDBQuery = async (id: string) => {
 
         DELETE FROM issues WHERE id=$1
 
-        `, [id]
-    );
+    `, [id]);
 
     return deleteResult;
 }

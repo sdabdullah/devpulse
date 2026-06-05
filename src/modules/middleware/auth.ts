@@ -3,7 +3,7 @@ import jwt, { type JwtPayload } from "jsonwebtoken"
 import config from "../../config";
 import { pool } from "../../db/dbIndex";
 import { error } from "node:console";
-import type { ROLES } from "../../types";
+import type { ROLES } from "../../types/types";
 
 const middlewareAuth = (...roles: ROLES[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {

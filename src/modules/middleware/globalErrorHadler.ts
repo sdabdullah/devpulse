@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 interface IError {
     success: boolean,
     message: string,
-    stack: string
+    stack: any
 }
 
 const hadleGobalError = (err: IError, req: Request, res: Response, next: NextFunction) => {
