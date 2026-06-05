@@ -81,7 +81,6 @@ const getSingleIssueRequest = async (req: Request, res: Response) => {
 
 const updateIssueRequest = async (req: Request, res: Response) => {
     const { id } = req.params;
-    // const { title, description, type } = req.body;
 
 
     try {
@@ -94,8 +93,6 @@ const updateIssueRequest = async (req: Request, res: Response) => {
                 message: "Issue Not found!"
             });
         }
-
-        // console.log(updateIssueResult);
 
         handleResponse(res, {
             statusCode: 200,

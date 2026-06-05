@@ -10,7 +10,7 @@ router.post("/", middlewareAuth(userRole.contributor, userRole.maintainer), issu
 router.get("/", issuesController.getAllIssuesRequest);
 router.get("/:id", issuesController.getSingleIssueRequest);
 
-router.patch("/:id", middlewareAuth(userRole.maintainer), issuesController.updateIssueRequest);
+router.patch("/:id", middlewareAuth(userRole.maintainer, userRole.contributor), issuesController.updateIssueRequest);
 
 router.delete("/:id", middlewareAuth(userRole.maintainer), issuesController.deleteIssuRequest);
 

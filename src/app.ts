@@ -14,7 +14,7 @@ const corsOptions ={
 app.use(cors(corsOptions))
 
 app.get("/", (req: Request, res: Response) => {
-    res.send("This is DevPulse project")
+    res.send("DevPulse Server Running")
 });
 
 app.use("/api/auth/signup", usersRouter);

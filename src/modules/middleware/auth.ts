@@ -2,8 +2,8 @@ import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import config from "../../config";
 import { pool } from "../../db/dbIndex";
-import { error } from "node:console";
 import type { ROLES } from "../../types/types";
+import handleResponse from "../../utils/handleResponse";
 
 const middlewareAuth = (...roles: ROLES[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -12,7 +12,8 @@ const middlewareAuth = (...roles: ROLES[]) => {
             const token = req.headers.authorization;
 
             if (!token) {
-                res.status(401).json({
+                handleResponse(res, {
+                    statusCode: 401,
                     success: false,
                     message: "Unauthorized access"
                 });

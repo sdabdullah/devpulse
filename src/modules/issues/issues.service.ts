@@ -58,6 +58,8 @@ const updateIssueDBQuery = async (payload: IupdateIssue, id: string) => {
         `, [title, description, type, status, id]
     );
 
+    
+
     return updateIssueResult;
 }
 
