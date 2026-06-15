@@ -12,10 +12,12 @@ const middlewareAuth = (...roles: ROLES[]) => {
             const token = req.headers.authorization;
 
             if (!token) {
+                const error = Error("Unauthorized access");
                 handleResponse(res, {
                     statusCode: 401,
                     success: false,
-                    message: "Unauthorized access"
+                    message: error.message,
+                    error: error
                 });
             }
 
@@ -28,17 +30,23 @@ const middlewareAuth = (...roles: ROLES[]) => {
             const users = usersData.rows[0];
 
             if (usersData.rows.length === 0) {
-                res.status(404).json({
+                const error = Error("User not found!");
+                handleResponse(res, {
+                    statusCode: 404,
                     success: false,
-                    message: "User not found!",
-                });
+                    message: error.message,
+                    error: error
+                })
             }
 
             if (roles.length && !roles.includes(users.role)) {
-                res.status(401).json({
+                const error = Error("Access Denied");
+                handleResponse(res, {
+                    statusCode: 401,
                     success: false,
-                    message: "Access Denied",
-                });
+                    message: error.message,
+                    error: error
+                })
             }
 
             req.user = decoded

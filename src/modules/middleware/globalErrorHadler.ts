@@ -1,15 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 
-interface IError {
-    success: boolean,
-    message: string,
-}
+type error = Error;
 
-const hadleGobalError = (error: IError, req: Request, res: Response, next: NextFunction) => {
+const hadleGobalError = (err: error, req: Request, res: Response, next: NextFunction) => {
 
     res.status(500).json({
         success: false,
-        message: error.message || "Internal Server Error",
+        message: err.message || "Internal Server Error",
     });
 }
 

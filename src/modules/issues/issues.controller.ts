@@ -4,7 +4,7 @@ import handleResponse from "../../utils/handleResponse";
 
 const makingIssueRequest = async (req: Request, res: Response,) => {
     const { title, description, type } = req.body
-    console.log(req.user);
+    // console.log(req.user);
     try {
         const issuesResult = await issuesService.createIssueDBQuery(req.body);
 
@@ -14,13 +14,15 @@ const makingIssueRequest = async (req: Request, res: Response,) => {
             message: "Issue created successfully",
             data: issuesResult.rows[0]
         });
-    } catch (error) {
+    } catch (err) {
+        const error = err as Error;
         handleResponse(res, {
             statusCode: 400,
             success: false,
-            message: "The issue alredy Submitted",
+            message: `${error.message} or Reporter id missing in request body`,
             error: error
         });
+
     }
 }
 
@@ -36,11 +38,12 @@ const getAllIssuesRequest = async (req: Request, res: Response) => {
             message: "Issues retrived successfully",
             data: allIssuResult.rows
         });
-    } catch (error) {
+    } catch (err) {
+        const error = err as Error;
         handleResponse(res, {
             statusCode: 404,
             success: false,
-            message: "Issues Not found!",
+            message: `${error.message} or Issues Not found!`,
             error: error
         });
     }
@@ -55,10 +58,12 @@ const getSingleIssueRequest = async (req: Request, res: Response) => {
         const result = await issuesService.getSingleIssueDBQuery(id as string)
 
         if (result.rows.length === 0) {
+            const error = Error("Issue Not found!")
             handleResponse(res, {
                 statusCode: 404,
                 success: false,
-                message: "Issue Not found!"
+                message: error.message,
+                error: error
             });
         }
 
@@ -68,11 +73,12 @@ const getSingleIssueRequest = async (req: Request, res: Response) => {
             message: "Issue retrived successfully",
             data: result.rows[0]
         });
-    } catch (error) {
+    } catch (err) {
+        const error = err as Error;
         handleResponse(res, {
             statusCode: 404,
             success: false,
-            message: "Issue Not found!",
+            message: `${error.message} or Issue Not found!`,
             error: error
         });
     }
@@ -87,10 +93,12 @@ const updateIssueRequest = async (req: Request, res: Response) => {
         const updateIssueResult = await issuesService.updateIssueDBQuery(req.body, id as string)
 
         if (updateIssueResult.rows.length === 0) {
+            const error = Error( "Issue Not found!");
             handleResponse(res, {
                 statusCode: 404,
                 success: false,
-                message: "Issue Not found!"
+                message: error.message,
+                error: error
             });
         }
 
@@ -100,11 +108,12 @@ const updateIssueRequest = async (req: Request, res: Response) => {
             message: "Issue updated successfully",
             data: updateIssueResult.rows[0]
         });
-    } catch (error) {
+    } catch (err) {
+        const error = err as Error;
         handleResponse(res, {
             statusCode: 500,
             success: false,
-            message: "Internal Server Error",
+            message: `${error.message} or Internal Server Error`,
             error: error
         });
     }
@@ -119,23 +128,27 @@ const deleteIssuRequest = async (req: Request, res: Response) => {
         const deleteResult = await issuesService.deleteIssueDBQuery(id as string)
 
         if (deleteResult.rowCount === 0) {
+            const error =  Error("Issue not found!");
             handleResponse(res, {
                 statusCode: 404,
                 success: false,
-                message: "Issue Not found!"
+                message: error.message,
+                error: error
             });
         }
 
         handleResponse(res, {
             statusCode: 200,
             success: true,
-            message: "Issue deleted successfully"
+            message: "Issue deleted successfully",
+            data: deleteResult
         });
-    } catch (error) {
+    } catch (err) {
+        const error = err as Error;
         handleResponse(res, {
             statusCode: 500,
             success: false,
-            message: "Internal Server Error",
+            message: `${error.message} or Internal Server Error`,
             error: error
         });
     }
