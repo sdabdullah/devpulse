@@ -5,7 +5,7 @@ import config from "../../config";
 
 const userLoginQuery = async (payload: { email: string; password: string }) => {
     const { email, password } = payload
-    
+
     const userLoginResult = await pool.query(`
         SELECT * FROM users WHERE email=$1
     `, [email]);
@@ -14,27 +14,27 @@ const userLoginQuery = async (payload: { email: string; password: string }) => {
         throw new Error("Invalid login details")
     }
 
-    const users = userLoginResult.rows[0]
-    const matchPassword = await bcrypt.compare(password, users.password)
+    const user = userLoginResult.rows[0]
+    const matchPassword = await bcrypt.compare(password, user.password)
 
     if (!matchPassword) {
         throw new Error("Invalid login details")
     }
 
     const jwtTokenPayload = {
-        id: users.id,
-        name: users.name,
-        email: users.email,
-        role: users.role,
-        created_at: users.created_at,
-        updated_at: users.updated_at
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        created_at: user.created_at,
+        updated_at: user.updated_at
     }
 
-    const user = jwtTokenPayload
     const token = jwt.sign(jwtTokenPayload, config.jwtsectet as string, {
         expiresIn: "1d"
     })
 
+    delete userLoginResult.rows[0].password
     return { token, user }
 }
 

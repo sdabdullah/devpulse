@@ -3,7 +3,7 @@ import { usersRouter } from "./modules/usersRegister/users.router";
 import { issuesRouter } from "./modules/issues/issues.router";
 import { usersAuthRouter } from "./modules/usersAuth/usersAuth.router";
 import cors from "cors"
-import hadleGobalError from "./modules/middleware/globalErrorHadler";
+import hadleGobalError from "./middleware/globalErrorHadler";
 
 const app: Application = express();
 

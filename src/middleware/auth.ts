@@ -1,14 +1,15 @@
 import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken"
-import config from "../../config";
-import { pool } from "../../db/dbIndex";
-import type { ROLES } from "../../types/types";
-import handleResponse from "../../utils/handleResponse";
+import config from "../config";
+import { pool } from "../db/dbIndex";
+import type { ROLES } from "../types/types";
+import handleResponse from "../utils/handleResponse";
 
 const middlewareAuth = (...roles: ROLES[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
-        console.log(roles);
+
         try {
+            
             const token = req.headers.authorization;
 
             if (!token) {
@@ -21,13 +22,16 @@ const middlewareAuth = (...roles: ROLES[]) => {
                 });
             }
 
-            const decoded = jwt.verify(token as string, config.jwtsectet as string) as JwtPayload
+            const decoded = jwt.verify(
+                token as string,
+                config.jwtsectet as string
+            ) as JwtPayload
 
             const usersData = await pool.query(`
             SELECT * FROM users WHERE email=$1
         `, [decoded.email])
 
-            const users = usersData.rows[0];
+            const user = usersData.rows[0];
 
             if (usersData.rows.length === 0) {
                 const error = Error("User not found!");
@@ -39,7 +43,7 @@ const middlewareAuth = (...roles: ROLES[]) => {
                 })
             }
 
-            if (roles.length && !roles.includes(users.role)) {
+            if (roles.length && !roles.includes(user.role)) {
                 const error = Error("Access Denied");
                 handleResponse(res, {
                     statusCode: 401,
@@ -49,7 +53,7 @@ const middlewareAuth = (...roles: ROLES[]) => {
                 })
             }
 
-            req.user = decoded
+            req.user = decoded;
 
             next()
 

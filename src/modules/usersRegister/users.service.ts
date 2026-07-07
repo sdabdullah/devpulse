@@ -5,8 +5,7 @@ import bcrypt from "bcryptjs";
 const insertSignupQuery = async (payload: IsignupUser) => {
 
     const { name, email, password, role } = payload
-
-    const userPassInHash = await bcrypt.hash(password, 12)
+    const userPassInHash = await bcrypt.hash(password, 10)
 
     if (role) {
         const registrationResult = await pool.query(`

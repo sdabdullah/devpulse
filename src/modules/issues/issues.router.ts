@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { issuesController } from "./issues.controller";
-import middlewareAuth from "../middleware/auth";
+import middlewareAuth from "../../middleware/auth";
 import { userRole } from "../../types/types";
 
 const router = Router();

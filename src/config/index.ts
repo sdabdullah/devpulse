@@ -11,4 +11,4 @@ const config = {
     jwtsectet: process.env.JWT_SECRET
 }
 
-export default config;
+export default config; 

@@ -4,9 +4,12 @@ import handleResponse from "../../utils/handleResponse";
 
 const makingIssueRequest = async (req: Request, res: Response,) => {
     const { title, description, type } = req.body
-    // console.log(req.user);
+
+    const reporter_id = req.user?.id;
+
     try {
-        const issuesResult = await issuesService.createIssueDBQuery(req.body);
+
+        const issuesResult = await issuesService.createIssueDBQuery(req.body, reporter_id);
 
         handleResponse(res, {
             statusCode: 201,
@@ -19,13 +22,12 @@ const makingIssueRequest = async (req: Request, res: Response,) => {
         handleResponse(res, {
             statusCode: 400,
             success: false,
-            message: `${error.message} or Reporter id missing in request body`,
+            message: error.message,
             error: error
         });
 
     }
 }
-
 
 const getAllIssuesRequest = async (req: Request, res: Response) => {
     try {
@@ -48,7 +50,6 @@ const getAllIssuesRequest = async (req: Request, res: Response) => {
         });
     }
 }
-
 
 const getSingleIssueRequest = async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -84,16 +85,14 @@ const getSingleIssueRequest = async (req: Request, res: Response) => {
     }
 }
 
-
 const updateIssueRequest = async (req: Request, res: Response) => {
     const { id } = req.params;
-
 
     try {
         const updateIssueResult = await issuesService.updateIssueDBQuery(req.body, id as string)
 
         if (updateIssueResult.rows.length === 0) {
-            const error = Error( "Issue Not found!");
+            const error = Error("Issue Not found!");
             handleResponse(res, {
                 statusCode: 404,
                 success: false,
@@ -119,7 +118,6 @@ const updateIssueRequest = async (req: Request, res: Response) => {
     }
 }
 
-
 const deleteIssuRequest = async (req: Request, res: Response) => {
     const { id } = req.params;
 
@@ -128,7 +126,7 @@ const deleteIssuRequest = async (req: Request, res: Response) => {
         const deleteResult = await issuesService.deleteIssueDBQuery(id as string)
 
         if (deleteResult.rowCount === 0) {
-            const error =  Error("Issue not found!");
+            const error = Error("Issue not found!");
             handleResponse(res, {
                 statusCode: 404,
                 success: false,

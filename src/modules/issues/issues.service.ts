@@ -1,10 +1,10 @@
 import { pool } from "../../db/dbIndex";
-import type { Iisseu, IupdateIssue } from "./issue.interface";
+import type { IIssue, IupdateIssue } from "./issue.interface";
 
 
-const createIssueDBQuery = async (payload: Iisseu) => {
+const createIssueDBQuery = async (payload: IIssue, reporter_id: number) => {
 
-    const { title, description, type, reporter_id } = payload;
+    const { title, description, type } = payload;
 
     const user = await pool.query(`
         SELECT * FROM users WHERE id=$1
@@ -19,7 +19,6 @@ const createIssueDBQuery = async (payload: Iisseu) => {
     `, [title, description, type, reporter_id]);
 
     return issuesResult;
-
 }
 
 
@@ -40,7 +39,6 @@ const getSingleIssueDBQuery = async (id: string) => {
     return result;
 }
 
-
 const updateIssueDBQuery = async (payload: IupdateIssue, id: string) => {
     const { title, description, type } = payload
 
@@ -57,8 +55,6 @@ const updateIssueDBQuery = async (payload: IupdateIssue, id: string) => {
 
         `, [title, description, type, status, id]
     );
-
-    
 
     return updateIssueResult;
 }
